@@ -1,0 +1,136 @@
+from datetime import datetime
+
+from django.db import models
+from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
+
+from blahhg.managers import LiveEntryManager
+
+
+class BlahhgEntry(models.Model):
+    """
+    A blog entry.
+    """
+    LIVE_STATUS = 1
+    DRAFT_STATUS = 2
+    HIDDEN_STATUS = 3
+    STATUS_CHOICES = (
+        (LIVE_STATUS, 'Live'),
+        (DRAFT_STATUS, 'Draft'),
+        (HIDDEN_STATUS, 'Hidden'),
+    )
+    
+    # Metadata.
+    author = models.ForeignKey(User)
+    enable_comments = models.BooleanField(
+        default=True,
+    )
+    pub_date = models.DateTimeField(
+        u'Date posted',
+        default=datetime.today
+    )
+    status = models.IntegerField(
+        choices=STATUS_CHOICES,
+        default=LIVE_STATUS,
+        help_text=u'Only entries with "live" status will be displayed publicly.'
+    )
+    title = models.CharField(
+        max_length=140,
+    )
+    slug = models.SlugField(
+        unique=True,
+        help_text='Used in the URL of the entry. Must be unique.'
+    )
+    
+    # The actual entry bits.
+    body = models.TextField()
+    body_html = models.TextField(
+        editable=False,
+        blank=True,
+    )
+    excerpt = models.TextField(
+        blank=True,
+        null=True,
+    )
+    excerpt_html = models.TextField(
+        editable=False,
+        blank=True,
+        null=True,
+    )
+    
+    # Tagging.
+    tags = TaggableManager()
+    
+    # Managers
+    live = LiveEntryManager()
+    objects = models.Manager()
+    
+    class Meta:
+        get_latest_by = 'pub_date'
+        ordering = ['-pub_date']
+        verbose_name = 'Entry'
+        verbose_name_plural = 'Entries'
+    
+    class Admin:
+        date_hierarchy = 'pub_date'
+        fields = (
+            ('Metadata', { 'fields':
+                ('title', 'slug', 'pub_date', 'author', 'status', 'enable_comments') }),
+            ('Entry', { 'fields':
+                ('excerpt', 'body') }),
+            ('Tags', { 'fields':
+                ('tags',) }),
+            )
+        list_display = ('title', 'pub_date', 'author', 'status', 'enable_comments')
+        list_filter = ('status',)
+    
+    def __unicode__(self):
+        return self.title
+    
+    #TODO use markdown here
+    def save(self):
+        if self.excerpt:
+            self.excerpt_html = self.excerpt
+        self.body_html = self.body
+        super(BlahhgEntry, self).save()
+    
+    #TODO clean this up
+    def get_absolute_url(self):
+        return ('coltrane_entry_detail', (), {
+            'year': self.pub_date.strftime('%Y'),
+            'month': self.pub_date.strftime('%b').lower(),
+            'day': self.pub_date.strftime('%d'),
+            'slug': self.slug
+        })
+    get_absolute_url = models.permalink(get_absolute_url)
+    
+    def _next_previous_helper(self, direction):
+        return getattr(self, 'get_%s_by_pub_date' % direction)(status__exact=self.LIVE_STATUS)
+    
+    def get_next(self):
+        """
+        Returns the next Entry with "live" status by ``pub_date``, if
+        there is one, or ``None`` if there isn't.
+        
+        In public-facing templates, use this method instead of
+        ``get_next_by_pub_date``, because ``get_next_by_pub_date``
+        does not differentiate entry status.
+        
+        """
+        return self._next_previous_helper('next')
+    
+    def get_previous(self):
+        """
+        Returns the previous Entry with "live" status by ``pub_date``,
+        if there is one, or ``None`` if there isn't.
+        
+        In public-facing templates, use this method instead of
+        ``get_previous_by_pub_date``, because
+        ``get_previous_by_pub_date`` does not differentiate entry
+        status..
+        
+        """
+        return self._next_previous_helper('previous')
+
+
+    

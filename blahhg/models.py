@@ -1,4 +1,5 @@
 from datetime import datetime
+import markdown
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -90,8 +91,8 @@ class BlahhgEntry(models.Model):
     #TODO use markdown here
     def save(self):
         if self.excerpt:
-            self.excerpt_html = self.excerpt
-        self.body_html = self.body
+            self.excerpt_html = markdown.markdown(self.excerpt)
+        self.body_html = markdown.markdown(self.body)
         super(BlahhgEntry, self).save()
     
     #TODO clean this up

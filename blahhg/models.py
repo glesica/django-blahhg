@@ -3,6 +3,7 @@ import markdown
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from taggit.managers import TaggableManager
 
 from blahhg.managers import LiveEntryManager
@@ -88,22 +89,14 @@ class BlahhgEntry(models.Model):
     def __unicode__(self):
         return self.title
     
-    #TODO use markdown here
     def save(self):
         if self.excerpt:
             self.excerpt_html = markdown.markdown(self.excerpt)
         self.body_html = markdown.markdown(self.body)
         super(BlahhgEntry, self).save()
     
-    #TODO clean this up
     def get_absolute_url(self):
-        return ('coltrane_entry_detail', (), {
-            'year': self.pub_date.strftime('%Y'),
-            'month': self.pub_date.strftime('%b').lower(),
-            'day': self.pub_date.strftime('%d'),
-            'slug': self.slug
-        })
-    get_absolute_url = models.permalink(get_absolute_url)
+        return reverse('blahhg-detail', kwargs={'slug': self.slug})
     
     def _next_previous_helper(self, direction):
         return getattr(self, 'get_%s_by_pub_date' % direction)(status__exact=self.LIVE_STATUS)

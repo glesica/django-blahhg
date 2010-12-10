@@ -1,6 +1,8 @@
 <h2>Blog</h2>
 <ul>
-    {% for entry in entries %}
-        {% include "blahhg/includes/entry.html" %}
+    {% for entry in entry_list %}
+    <li>
+        {% include "blahhg/entry-list-item.html" %}
+    </li>
     {% endfor %}
-</li>
+</ul>

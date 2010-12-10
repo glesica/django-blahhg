@@ -8,7 +8,6 @@ urlpatterns = patterns('django.views.generic',
         'queryset':             BlahhgEntry.live.all(),
         'template_name':        'blahhg/blog.html',
         'paginate_by':          settings.BLAHHG_LIST_SIZE,
-        'page':                 1,
         'template_object_name': 'entry',
     }),
     (r'^archive/(?P<slug>[a-z0-9-]+)/$', 'list_detail.object_detail', {

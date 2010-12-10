@@ -1,3 +1,22 @@
+{% load humanize %}
+
 {% if entry %}
-<a href="/blog/archive/{{ entry.slug }}">{{ entry|safe }}</a>
+<div class="blog-list-item">
+    <h3><a href="{% url django.views.generic.list_detail.object_detail slug=entry.slug %}" title="{{ entry.title }}">{{ entry.title }}</a></h3>
+    <div class="blog-meta">
+        Posted 
+        <span class="blog-pub-date">{{ entry.pub_date|naturalday }}</span>
+        by 
+        {% if entry.author.first_name %}
+        <span class="blog-author">{{ entry.author.first_name }} {{ entry.author.last_name }}</span>
+        {% else %}
+        <span class="blog-author">{{ entry.author.username }}</span>
+        {% endif %}
+    </div>
+    {% if entry.excerpt_html %}
+        <div class="blog-excerpt">
+            {{ entry.excerpt_html|safe }}
+        </div>
+    {% endif %}
+</div>
 {% endif %}

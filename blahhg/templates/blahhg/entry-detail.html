@@ -2,35 +2,35 @@
 
 {% if entry %}
 <div class="blog-detail">
-{% include "blahhg/social.html" %}
-<h2>{{ entry.title }}</h2>
-<div class="blog-meta">
-    Posted 
-    <span class="blog-pub-date">{{ entry.pub_date|naturalday }}</span>
-    by 
-    {% if entry.author.first_name %}
-    <span class="blog-author">{{ entry.author.first_name }} {{ entry.author.last_name }}</span>
-    {% else %}
-    <span class="blog-author">{{ entry.author.username }}</span>
+    {% include "blahhg/social.html" %}
+    <h3>{{ entry.title }}</h3>
+    <div class="blog-meta">
+        Posted 
+        <span class="blog-pub-date">{{ entry.pub_date|naturalday }}</span>
+        by 
+        {% if entry.author.first_name %}
+        <span class="blog-author">{{ entry.author.first_name }} {{ entry.author.last_name }}</span>
+        {% else %}
+        <span class="blog-author">{{ entry.author.username }}</span>
+        {% endif %}
+    </div>
+    {% if entry.excerpt_html %}
+        <div class="blog-excerpt">
+            {{ entry.excerpt_html|safe }}
+        </div>
+    {% endif %}
+    <div class="blog-body">
+        {{ entry.body_html|safe }}
+    </div>
+    {% if entry.tags.all %}
+    <div class="blog-tags">
+        Tagged with:
+        {{ entry.tags.all|join:", " }}
+    </div>
+    {% endif %}
+    {% if entry.enable_comments %}
+    <h3>Comments</h3>
+    {% include "blahhg/comments.html" %}
     {% endif %}
 </div>
-{% if entry.excerpt_html %}
-    <div class="blog-excerpt">
-        {{ entry.excerpt_html|safe }}
-    </div>
-{% endif %}
-<div class="blog-body">
-    {{ entry.body_html|safe }}
-</div>
-{% if entry.tags.all %}
-<div class="blog-tags">
-    Tagged with:
-    {{ entry.tags.all|join:", " }}
-</div>
-{% endif %}
-{% if entry.enable_comments %}
-<h3>Comments</h3>
-{% include "blahhg/comments.html" %}
-</div>
-{% endif %}
 {% endif %}

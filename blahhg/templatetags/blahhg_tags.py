@@ -5,7 +5,7 @@ from ..models import BlahhgEntry
 
 register = template.Library()
 
-@register.inclusion_tag('blahhg/includes/entry-detail.html')
+@register.inclusion_tag('blahhg/entry-detail.html')
 def blahhg_entry_detail(entry_slug=None):
     """
     Inserts the entry corresponding to `entry_slug` into the template.
@@ -22,7 +22,7 @@ def blahhg_entry_detail(entry_slug=None):
     
     return {'entry': entry}
 
-@register.inclusion_tag('blahhg/includes/entry-list.html')
+@register.inclusion_tag('blahhg/entry-list.html')
 def blahhg_entry_list(num=None):
     """
     Inserts a list of entries into the template. If `num` is provided 

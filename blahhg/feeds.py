@@ -7,7 +7,7 @@ from blahhg.models import BlahhgEntry
 
 class RssFeed(Feed):
     title = settings.BLAHHG_TITLE
-    link = reverse('blahhg-blog')
+    link = '/blog/' #TODO fix this crap
     description = settings.BLAHHG_DESCRIPTION
     
     def items(self):

@@ -3,7 +3,7 @@
  George Lesica <glesica@gmail.com>
 *******************************************************************************/
 
-.blog-meta {
+.blog-detail .blog-meta {
     padding: 6px;
     margin: 12px 0;
     
@@ -14,7 +14,37 @@
 	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=2, Direction=45, Color='#666666')";
 	/* For IE 5.5 - 7 */
 	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=2, Direction=45, Color='#666666');
-	
+
+	background: #dddddd;
+    background: -webkit-gradient(linear, left top, left bottom, from(#dddddd), to(#c0c0c0));
+    background: -moz-linear-gradient(top,  #dddddd,  #c0c0c0);
+    /* For IE */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dddddd', endColorstr='#c0c0c0');
+}
+.blog-list-item .blog-meta {
+    padding-bottom: 12px;
+}
+.blog-detail .blog-excerpt {
+    font-style: italic;
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 4px solid #dddddd;
+}
+.blog-list-item .blog-excerpt {
+    font-style: italic;
+}
+.blog-tags {
+    padding: 6px;
+    margin: 12px 0;
+    
+    box-shadow: 1px 1px 2px #666666;
+    -moz-box-shadow: 1px 1px 2px #666666;
+    -webkit-box-shadow: 1px 1px 2px #666666;
+    /* For IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=2, Direction=45, Color='#666666')";
+	/* For IE 5.5 - 7 */
+	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=2, Direction=45, Color='#666666');
+
 	background: #dddddd;
     background: -webkit-gradient(linear, left top, left bottom, from(#dddddd), to(#c0c0c0));
     background: -moz-linear-gradient(top,  #dddddd,  #c0c0c0);

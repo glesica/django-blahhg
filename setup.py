@@ -21,6 +21,11 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary'
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary',
     ],
+    requires=[
+        'django',
+        'markdown',
+        'django-taggit',
+    ]
 )

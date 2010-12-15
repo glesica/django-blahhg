@@ -26,6 +26,6 @@ setup(
     requires=[
         'django',
         'markdown',
-        'django-taggit',
+        'django_taggit',
     ]
 )

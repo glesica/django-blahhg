@@ -59,6 +59,10 @@ class BlahhgEntry(models.Model):
         blank=True,
         null=True,
     )
+    auto_excerpt = models.BooleanField(
+        default=False,
+        help_text='If set an excerpt will always be auto-generated, overwriting any custom excerpt.',
+    )
     
     # Tagging.
     tags = TaggableManager()
@@ -79,7 +83,7 @@ class BlahhgEntry(models.Model):
             ('Metadata', { 'fields':
                 ('title', 'slug', 'pub_date', 'author', 'status', 'enable_comments') }),
             ('Entry', { 'fields':
-                ('excerpt', 'body') }),
+                ('excerpt', 'auto_excerpt', 'body') }),
             ('Tags', { 'fields':
                 ('tags',) }),
             )
@@ -90,8 +94,24 @@ class BlahhgEntry(models.Model):
         return self.title
     
     def save(self):
-        if self.excerpt:
-            self.excerpt_html = markdown.markdown(self.excerpt)
+        if not self.excerpt or self.auto_excerpt:
+            # split up on double line breaks (paragraphs) and take paragraphs
+            # from the beginning such that total length < AUTO_EXCERPT_SIZE
+            # always include at least one paragraph
+            total = 0
+            paragraphs = []
+            for para in self.body.split('\r\n\r\n'): #TODO make sure this is consistent
+                if total < 200: #TODO add this to settings
+                    total += len(para)
+                    paragraphs.append(para)
+            self.excerpt = '\n\n'.join(paragraphs)
+            
+        # Add the "Read More" link.
+        #TODO Needs to be customizable
+        #TODO Should be translated
+        self.excerpt += ' <a href="%s" title="%s">Read More</a>' % (self.get_absolute_url(), self.title)
+        
+        self.excerpt_html = markdown.markdown(self.excerpt)
         self.body_html = markdown.markdown(self.body)
         super(BlahhgEntry, self).save()
     

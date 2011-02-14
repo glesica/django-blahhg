@@ -14,7 +14,7 @@
         <span class="blog-author">{{ entry.author.username }}</span>
         {% endif %}
     </div>
-    {% if entry.excerpt_html %}
+    {% if entry.excerpt_html and not entry.auto_excerpt %}
         <div class="blog-excerpt">
             {{ entry.excerpt_html|safe }}
         </div>

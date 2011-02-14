@@ -41,6 +41,12 @@ of the blog.
 the comments template in entry detail view.
   * `BLAHHG_USE_SOCIAL` (required) - boolean, whether to try to include the 
 social template in entry detail view.
+  * `BLAHHG_AUTO_EXCERPT_SIZE` (required) - integer, the maximum number 
+of characters to include in automatically generated excerpts. Formatting 
+characters will be counted and only whole-paragraphs are included so the 
+actual number of characters in the excerpt will rarely match this number 
+exactly. Paragraphs are added to the excerpt until the number of characters 
+being included (counting formatting characters) is bigger than this number.
 
 ### Feeds ###
   * `BLAHHG_FEED_SIZE` (required) - the number of entries to provide in 
